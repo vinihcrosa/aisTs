@@ -1,1 +1,2 @@
-export * from './utils/sixBitUtils';
+export * from './utils';
+export * from './messages';
