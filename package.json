@@ -24,6 +24,8 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "husky": "^9.1.7",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
