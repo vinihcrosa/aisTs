@@ -1,9 +1,8 @@
-import { SixBitsUtils } from "../../utils/sixBitUtils";
+import { SixBitsUtils } from '../../utils';
 import {AisArmor} from "../../utils";
 import { Mmsi } from "../../types/mmsi";
 
 export class AisMessageType5{
-    public messageType: number = 5;
     public repeatIndicator: number = 0;
     private _mmsi: Mmsi = new Mmsi();
     public get mmsi(): string {
@@ -92,7 +91,7 @@ export class AisMessageType5{
         const isValid = regex.test(binary) && binary.length >= 424;
         if (!isValid) throw new Error("Invalid binary string");
 
-        if (binary.substring(0, 6) !== "000101") throw new Error("Invalid message type");
+        if (!binary.startsWith("000101")) throw new Error("Invalid message type");
 
         const aisMessage = new AisMessageType5();
 
@@ -108,7 +107,6 @@ export class AisMessageType5{
         aisMessage.toPort = parseInt(binary.substring(258, 264), 2);
         aisMessage.toStarboard = parseInt(binary.substring(264, 270), 2);
         aisMessage.epfd = parseInt(binary.substring(270, 274), 2);
-        const etaMonth = binary.substring(274, 278);
         aisMessage.etaMonth = parseInt(binary.substring(274, 278), 2);
         aisMessage.etaDay = parseInt(binary.substring(278, 283), 2);
         aisMessage.etaHour = parseInt(binary.substring(283, 288), 2);
@@ -119,11 +117,6 @@ export class AisMessageType5{
         aisMessage.spare = parseInt(binary.substring(423, 424), 2);
 
         return aisMessage;
-    }
-
-    static fromEncodedString(str: string): AisMessageType5 {
-        const binary = SixBitsUtils.stringToSixbit(str);
-        return AisMessageType5.fromBinary(binary);
     }
 
     static fromArmoredString(str: string): AisMessageType5 {

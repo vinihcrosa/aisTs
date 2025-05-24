@@ -2,7 +2,6 @@ import {Mmsi} from "../../types/mmsi";
 import {AisArmor} from "../../utils";
 
 export class AisMessageType1{
-    public messageeType: number = 1;
     public repeatIndicator: number = 0;
     private _mmsi: Mmsi = new Mmsi();
     public get mmsi(): string {
@@ -17,8 +16,8 @@ export class AisMessageType1{
         if (value < -128 || value > 127) {
             throw new Error("Rate of turn must be between -128 and 127.");
         }
-         const rot = (Math.pow(value / 4.733, 2)) * Math.sign(value);
-        this._rateOfTurn = rot;
+
+        this._rateOfTurn = (Math.pow(value / 4.733, 2)) * Math.sign(value);
     }
     public get rateOfTurn(): number {
         return this._rateOfTurn;
