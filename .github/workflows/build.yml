@@ -1,7 +1,5 @@
 name: build.yml
 on:
-  push:
-    - master
   pull_request:
     branches:
       - main
