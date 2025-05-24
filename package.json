@@ -11,7 +11,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage --coverage.reporter=lcov",
     "test:watch": "vitest",
     "prepare": "husky"
   },
