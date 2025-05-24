@@ -11,7 +11,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "husky"
   },
   "keywords": [
     "typescript",
@@ -23,6 +24,7 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "husky": "^9.1.7",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
     "vitest": "^3.1.4"
