@@ -1,25 +1,14 @@
 import { SixBitsUtils } from "../../utils/sixBitUtils";
 import {AisArmor} from "../../utils";
+import { Mmsi } from "../../types/mmsi";
 
 export class AisMessageType5{
     public messageType: number = 5;
     public repeatIndicator: number = 0;
-    private _mmsi: string = ''.padStart(9, '0');
-
-    public set mmsi(value: number | string) {
-        const mmsiString = value.toString();
-
-        if (mmsiString.length > 9) {
-            throw new Error("MMSI must be a 9-digit number.");
-        }
-
-        this._mmsi = mmsiString.padStart(9, '0');
-    }
-
+    private _mmsi: Mmsi = new Mmsi();
     public get mmsi(): string {
-        return this._mmsi;
+        return this._mmsi.mmsi;
     }
-
     public aisVersion: number = 0;
     public imoNumber: number = 0;
     private _callSign: string = "".padEnd(7, ' ');
@@ -108,7 +97,7 @@ export class AisMessageType5{
         const aisMessage = new AisMessageType5();
 
         aisMessage.repeatIndicator = parseInt(binary.substring(6, 8), 2);
-        aisMessage.mmsi = parseInt(binary.substring(8, 38), 2);
+        aisMessage._mmsi.mmsi = parseInt(binary.substring(8, 38), 2);
         aisMessage.aisVersion = parseInt(binary.substring(38, 40), 2);
         aisMessage.imoNumber = parseInt(binary.substring(40, 70), 2);
         aisMessage.callSign = SixBitsUtils.sixbitToString(binary.substring(70, 112));
@@ -146,7 +135,7 @@ export class AisMessageType5{
         const binary = [
             "000101",
             this.repeatIndicator.toString(2).padStart(2, '0'),
-            parseInt(this.mmsi).toString(2).padStart(30, '0'),
+            this._mmsi.toBinary,
             this.aisVersion.toString(2).padStart(2, '0'),
             this.imoNumber.toString(2).padStart(30, '0'),
             SixBitsUtils.stringToSixbit(this.callSignRaw, 42),
