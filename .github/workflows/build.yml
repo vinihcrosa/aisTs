@@ -3,7 +3,8 @@ on:
   push:
     - master
   pull_request:
-    type: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
   sonarqube:
