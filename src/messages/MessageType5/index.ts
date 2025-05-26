@@ -9,6 +9,11 @@ export class AisMessageType5 implements IAisMessage {
     public get mmsi(): string {
         return this._mmsi.mmsi;
     }
+
+    public set mmsi(value: string) {
+        this._mmsi.mmsi = value.toString().padStart(9, '0');
+    }
+
     public aisVersion: number = 0;
     public imoNumber: number = 0;
     private _callSign: string = "".padEnd(7, ' ');
@@ -85,7 +90,7 @@ export class AisMessageType5 implements IAisMessage {
     public dte: number = 0;
     public spare: number = 0;
 
-    public constructor(armoredString: string) {
+    public constructor(armoredString?: string) {
         if (!armoredString) {
             return;
         }
