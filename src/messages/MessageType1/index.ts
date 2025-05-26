@@ -119,5 +119,10 @@ export class AisMessageType1 implements IAisMessage{
         const binary = this.toBinary();
         return AisArmor.armorPayload(binary);
     }
+
+    public getPaddedLength(): number {
+        const binary = this.toBinary();
+        return AisArmor.getPaddedLength(binary);
+    }
 }
 
