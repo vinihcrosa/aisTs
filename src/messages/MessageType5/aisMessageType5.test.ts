@@ -33,7 +33,28 @@ describe(`AisMessageType5`, () => {
 
     it("should create a valid armored string", () => {
         const armoredString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
-        const aisMessage = aisMessageCreator(AisMessageType5, armoredString)
+        const aisMessage = new AisMessageType5();
+
+        aisMessage.repeatIndicator = 0;
+        aisMessage.mmsi = "255806495";
+        aisMessage.aisVersion = 1;
+        aisMessage.imoNumber = 9702091;
+        aisMessage.callSign = "CQEV4";
+        aisMessage.shipName = "MSC SOFIA CELESTE";
+        aisMessage.shipType = 71;
+        aisMessage.toBow = 225;
+        aisMessage.toStern = 75;
+        aisMessage.toPort = 19;
+        aisMessage.toStarboard = 29;
+        aisMessage.epfd = 1;
+        aisMessage.etaMonth = 10;
+        aisMessage.etaDay = 10;
+        aisMessage.etaHour = 20;
+        aisMessage.etaMinute = 0;
+        aisMessage.draught = 12.4;
+        aisMessage.destination = "BRSSZ";
+        aisMessage.dte = 0;
+        aisMessage.spare = 0;
 
         const newArmoredString = aisMessage.toArmoredString();
         expect(newArmoredString).toBe(armoredString);
