@@ -1,12 +1,6 @@
 export class AisArmor {
     static armorPayload(bits: string): string {
-        if (!/^[01]+$/.test(bits)) {
-            throw new Error("A string de bits deve conter apenas 0 e 1.");
-        }
-
-        // Completa com 0s para múltiplo de 6
-        const padLength = (6 - (bits.length % 6)) % 6;
-        const paddedBits = bits.padEnd(bits.length + padLength, '0');
+        const paddedBits = bits.padEnd(bits.length + AisArmor.getPaddedLength(bits), '0');
 
         const payloadChars: string[] = [];
         for (let i = 0; i < paddedBits.length; i += 6) {
@@ -20,6 +14,14 @@ export class AisArmor {
         }
 
         return payloadChars.join('');
+    }
+
+    static getPaddedLength(bits: string): number {
+        if (!/^[01]+$/.test(bits)) {
+            throw new Error("A string de bits deve conter apenas 0 e 1.");
+        }
+
+        return (6 - (bits.length % 6)) % 6;
     }
 
     static unarmorPayload(payload: string): string {

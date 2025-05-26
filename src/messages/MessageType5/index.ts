@@ -1,8 +1,9 @@
 import { SixBitsUtils } from '../../utils';
 import {AisArmor} from "../../utils";
 import { Mmsi } from "../../types/mmsi";
+import {IAisMessage} from "../aisMessage.interface";
 
-export class AisMessageType5{
+export class AisMessageType5 implements IAisMessage {
     public repeatIndicator: number = 0;
     private _mmsi: Mmsi = new Mmsi();
     public get mmsi(): string {
@@ -84,44 +85,41 @@ export class AisMessageType5{
     public dte: number = 0;
     public spare: number = 0;
 
+    public constructor(armoredString: string) {
+        if (!armoredString) {
+            return;
+        }
+        const bits = AisArmor.unarmorPayload(armoredString);
+        this.fromBinary(bits);
+    }
 
-
-    static fromBinary(binary: string): AisMessageType5 {
+    public fromBinary(binary: string): void {
         const regex = /^[01]+$/;
         const isValid = regex.test(binary) && binary.length >= 424;
         if (!isValid) throw new Error("Invalid binary string");
 
         if (!binary.startsWith("000101")) throw new Error("Invalid message type");
 
-        const aisMessage = new AisMessageType5();
-
-        aisMessage.repeatIndicator = parseInt(binary.substring(6, 8), 2);
-        aisMessage._mmsi.mmsi = parseInt(binary.substring(8, 38), 2);
-        aisMessage.aisVersion = parseInt(binary.substring(38, 40), 2);
-        aisMessage.imoNumber = parseInt(binary.substring(40, 70), 2);
-        aisMessage.callSign = SixBitsUtils.sixbitToString(binary.substring(70, 112));
-        aisMessage.shipName = SixBitsUtils.sixbitToString(binary.substring(112, 232));
-        aisMessage.shipType = parseInt(binary.substring(232, 240), 2);
-        aisMessage.toBow = parseInt(binary.substring(240, 249), 2);
-        aisMessage.toStern = parseInt(binary.substring(249, 258), 2);
-        aisMessage.toPort = parseInt(binary.substring(258, 264), 2);
-        aisMessage.toStarboard = parseInt(binary.substring(264, 270), 2);
-        aisMessage.epfd = parseInt(binary.substring(270, 274), 2);
-        aisMessage.etaMonth = parseInt(binary.substring(274, 278), 2);
-        aisMessage.etaDay = parseInt(binary.substring(278, 283), 2);
-        aisMessage.etaHour = parseInt(binary.substring(283, 288), 2);
-        aisMessage.etaMinute = parseInt(binary.substring(288, 294), 2);
-        aisMessage.draught = parseInt(binary.substring(294, 302), 2) / 10;
-        aisMessage.destination = SixBitsUtils.sixbitToString(binary.substring(302, 422));
-        aisMessage.dte = parseInt(binary.substring(422, 423), 2);
-        aisMessage.spare = parseInt(binary.substring(423, 424), 2);
-
-        return aisMessage;
-    }
-
-    static fromArmoredString(str: string): AisMessageType5 {
-        const bits = AisArmor.unarmorPayload(str);
-        return AisMessageType5.fromBinary(bits);
+        this.repeatIndicator = parseInt(binary.substring(6, 8), 2);
+        this._mmsi.mmsi = parseInt(binary.substring(8, 38), 2);
+        this.aisVersion = parseInt(binary.substring(38, 40), 2);
+        this.imoNumber = parseInt(binary.substring(40, 70), 2);
+        this.callSign = SixBitsUtils.sixbitToString(binary.substring(70, 112));
+        this.shipName = SixBitsUtils.sixbitToString(binary.substring(112, 232));
+        this.shipType = parseInt(binary.substring(232, 240), 2);
+        this.toBow = parseInt(binary.substring(240, 249), 2);
+        this.toStern = parseInt(binary.substring(249, 258), 2);
+        this.toPort = parseInt(binary.substring(258, 264), 2);
+        this.toStarboard = parseInt(binary.substring(264, 270), 2);
+        this.epfd = parseInt(binary.substring(270, 274), 2);
+        this.etaMonth = parseInt(binary.substring(274, 278), 2);
+        this.etaDay = parseInt(binary.substring(278, 283), 2);
+        this.etaHour = parseInt(binary.substring(283, 288), 2);
+        this.etaMinute = parseInt(binary.substring(288, 294), 2);
+        this.draught = parseInt(binary.substring(294, 302), 2) / 10;
+        this.destination = SixBitsUtils.sixbitToString(binary.substring(302, 422));
+        this.dte = parseInt(binary.substring(422, 423), 2);
+        this.spare = parseInt(binary.substring(423, 424), 2);
     }
 
     public toBinary(): string {
@@ -155,5 +153,10 @@ export class AisMessageType5{
     public toArmoredString(): string {
         const binary = this.toBinary();
         return AisArmor.armorPayload(binary);
+    }
+
+    public getPaddedLength(): number {
+        const binary = this.toBinary();
+        return AisArmor.getPaddedLength(binary);
     }
 }

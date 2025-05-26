@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { AisMessageType5 } from './index'
+import {aisMessageCreator} from "../messageCreator";
 
 describe(`AisMessageType5`, () => {
     it("should create a valid ais message type 5 from sofia ship", () => {
-        const sixbitEncodedString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
+        const armoredString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
 
-        const aisMessage = AisMessageType5.fromArmoredString(sixbitEncodedString);
+        const aisMessage = aisMessageCreator(AisMessageType5, armoredString)
 
         expect(aisMessage).toBeInstanceOf(AisMessageType5);
         expect(aisMessage.repeatIndicator).toBe(0);
@@ -31,10 +32,10 @@ describe(`AisMessageType5`, () => {
     })
 
     it("should create a valid armored string", () => {
-        const sixbitEncodedString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
+        const armoredString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
+        const aisMessage = aisMessageCreator(AisMessageType5, armoredString)
 
-        const aisMessage = AisMessageType5.fromArmoredString(sixbitEncodedString);
-        const armoredString = aisMessage.toArmoredString();
-        expect(armoredString).toBe(sixbitEncodedString);
+        const newArmoredString = aisMessage.toArmoredString();
+        expect(newArmoredString).toBe(armoredString);
     })
 })

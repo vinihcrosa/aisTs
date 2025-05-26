@@ -1,11 +1,12 @@
 import {describe, expect, it} from 'vitest';
 import { AisMessageType1} from "./index";
+import {aisMessageCreator} from "../messageCreator";
 
 describe(`AisMessageType1`, () => {
     it("should create a valid ais message type 1 from binary string", () => {
         const armoredString = "13ku<7hw18LrQDSjpBPnr5Tl0D2j";
 
-        const aisMessage = AisMessageType1.fromArmoredString(armoredString);
+        const aisMessage = aisMessageCreator(AisMessageType1, armoredString);
 
         expect(aisMessage).toBeInstanceOf(AisMessageType1);
         expect(aisMessage.repeatIndicator).toBe(0);
@@ -27,7 +28,7 @@ describe(`AisMessageType1`, () => {
 
     it('should create a valid armores string', () => {
         const armoredString = "13ku<7hw18LrQDSjpBPnr5Tl0D2j";
-        const aisMessage = AisMessageType1.fromArmoredString(armoredString);
+        const aisMessage = aisMessageCreator(AisMessageType1, armoredString);
 
         const armoredStringResult = aisMessage.toArmoredString();
 
