@@ -5,24 +5,26 @@ import {IAisMessage} from "../aisMessage.interface";
 export class AisMessageType1 implements IAisMessage{
     public repeatIndicator: number = 0;
     private _mmsi: Mmsi = new Mmsi();
+
     public get mmsi(): string {
         return this._mmsi.mmsi;
     }
+
+    public set mmsi(value: string) {
+        this._mmsi.mmsi = value.toString().padStart(9, '0');
+    }
+
     public navigationStatus: number = 0;
     private _rateOfTurn: number = 0;
-    private set rateOfTurn(value: number) {
-        if(value > 127) {
-            value = value - 256
-        }
-        if (value < -128 || value > 127) {
-            throw new Error("Rate of turn must be between -128 and 127.");
-        }
 
-        this._rateOfTurn = (Math.pow(value / 4.733, 2)) * Math.sign(value);
+    public set rateOfTurn(value: number) {
+        this._rateOfTurn = value;
     }
+
     public get rateOfTurn(): number {
         return this._rateOfTurn;
     }
+
     public speedOverGround: number = 0;
     public positionAccuracy: number = 0;
     public longitude: number = 0;
@@ -51,7 +53,7 @@ export class AisMessageType1 implements IAisMessage{
         this.repeatIndicator = parseInt(binary.substring(6, 8), 2);
         this._mmsi.mmsi = parseInt(binary.substring(8, 38), 2);
         this.navigationStatus = parseInt(binary.substring(38, 42), 2);
-        this.rateOfTurn = parseInt(binary.substring(42, 50), 2);
+        this.rateOfTurn = this.decodeRateOfTurn(binary.substring(42, 50));
         this.speedOverGround = parseInt(binary.substring(50, 60), 2)/10;
         this.positionAccuracy = parseInt(binary.substring(60, 61), 2);
         this.longitude = this.parseSignedInt(binary.substring(61, 89)) / 600000;
@@ -62,6 +64,18 @@ export class AisMessageType1 implements IAisMessage{
         this.maneuverIndicator = parseInt(binary.substring(143, 145), 2);
         this.spare = parseInt(binary.substring(145, 148), 2);
         this.radioStatus = parseInt(binary.substring(148, 168), 2);
+    }
+
+    private decodeRateOfTurn(rotBits: string): number  {
+        let rotValue = parseInt(rotBits, 2);
+
+        // Interpreta como signed int de 8 bits (Two's Complement)
+        if (rotBits[0] === '1') {
+            rotValue = rotValue - 256;
+        }
+
+        // Converte valor AIS em taxa real (graus por minuto)
+        return Math.pow(rotValue / 4.733, 2) * Math.sign(rotValue);
     }
 
     private parseSignedInt(binStr: string): number {
@@ -85,8 +99,8 @@ export class AisMessageType1 implements IAisMessage{
             this.encodeROT(this.rateOfTurn),
             parseInt((this.speedOverGround * 10).toFixed(0)).toString(2).padStart(10, '0'),
             this.positionAccuracy.toString(2),
-            this.encodeSignedInt(this.longitude * 600000, 28),
-            this.encodeSignedInt(this.latitude * 600000, 27),
+            this.encodeSignedInt(Math.round(this.longitude * 600000), 28),
+            this.encodeSignedInt(Math.round(this.latitude * 600000), 27),
             parseInt((this.courseOverGround * 10).toFixed(0)).toString(2).padStart(12, '0'),
             this.trueHeading.toString(2).padStart(9, '0'),
             this.timestamp.toString(2).padStart(6, '0'),
@@ -126,3 +140,4 @@ export class AisMessageType1 implements IAisMessage{
     }
 }
 
+"000001000011110011111101001100000111110000111111110001001000011100111010100001010100100011110010111000010010100000110110111010000101100100110100000000010100000010110010"
