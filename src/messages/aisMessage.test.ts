@@ -22,15 +22,17 @@ describe("AisMessage", () => {
     it("should create a valid AIS message type 5", () => {
         const armoredString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
 
-        const nmeaMessage1 = "!AIVDM,2,1,1,A,53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888,0";
-        const nmeaMessage2 = "!AIVDM,2,2,1,A,888888880,2";
+        const nmeaMessages = [
+            "!AIVDM,2,1,1,A,53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888,0",
+            "!AIVDM,2,2,1,A,888888880,2"
+        ]
 
         const aisMessage = aisMessageCreator(AisMessageType5, armoredString)
         const aisMessageObj = new AisMessage("!AIVDM", "1", "A", aisMessage);
         const sentences = aisMessageObj.toNmea();
 
         expect(sentences).length(2);
-        expect(sentences[0]).toBe(nmeaMessage1);
-        expect(sentences[1]).toBe(nmeaMessage2);
+        expect(sentences[0]).toBe(nmeaMessages[0]);
+        expect(sentences[1]).toBe(nmeaMessages[1]);
     })
 })
