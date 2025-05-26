@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import { AisMessageType1} from "./index";
-import {aisMessageCreator} from "./messageCreator";
+import {aisMessageCreator} from "../messageCreator";
 
 describe(`AisMessageType1`, () => {
     it("should create a valid ais message type 1 from binary string", () => {

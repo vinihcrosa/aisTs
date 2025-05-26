@@ -1,4 +1,4 @@
-import {IAisMessage, IAisMessageConstructor} from "../aisMessage.interface";
+import {IAisMessage, IAisMessageConstructor} from "./aisMessage.interface";
 
 export function aisMessageCreator<T extends IAisMessage>(
     ctor: IAisMessageConstructor<T>,
