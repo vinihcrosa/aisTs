@@ -20,11 +20,11 @@ describe("AisMessage", () => {
   })
 
   it("should create a valid AIS message type 5", () => {
-    const armoredString = "53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888888888880";
+    const armoredString = "53ku<7h2D2dd=4EK@00m<>1<tHT60<DhE=@D001J>IjCC0000Qh00000000000000000000";
 
     const nmeaMessages = [
-      "!AIVDM,2,1,1,A,53ku<7l2D2dd=4EKB20m<>1<tHT60<DhE=@F2217L9;CM6UD0O0TTln`888888,0",
-      "!AIVDM,2,2,1,A,888888880,2"
+      "!AIVDM,2,1,1,A,53ku<7h2D2dd=4EK@00m<>1<tHT60<DhE=@D001J>IjCC0000Qh00000000000,0",
+      "!AIVDM,2,2,1,A,000000000,2"
     ]
 
     const aisMessage = aisMessageCreator(AisMessageType5, armoredString)

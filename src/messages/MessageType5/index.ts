@@ -24,9 +24,9 @@ export class AisMessageType5 implements IAisMessage {
 
     public get callSignRaw(): string {
         if (this.callSign === '') {
-            return "@".padEnd(7, ' ');
+            return "@".padEnd(7, '@');
         }
-        return this.callSign.padEnd(7, ' ');
+        return this.callSign.padEnd(7, '@');
     }
 
     public set callSign(value: string) {
@@ -51,9 +51,9 @@ export class AisMessageType5 implements IAisMessage {
 
     public get shipNameRaw(): string {
         if (this.shipName === '') {
-            return "@".padEnd(20, ' ');
+            return "@".padEnd(20, '@');
         }
-        return this.shipName.padEnd(20, ' ');
+        return this.shipName.padEnd(20, '');
     }
 
     public shipType: number = 0;
@@ -82,9 +82,9 @@ export class AisMessageType5 implements IAisMessage {
 
     public get destinationRaw(): string {
         if (this.destination === '') {
-            return "@".padEnd(20, ' ');
+            return "@".padEnd(20, '@');
         }
-        return this.destination.padEnd(20, ' ');
+        return this.destination.padEnd(20, '@');
     }
 
     public dte: number = 0;
