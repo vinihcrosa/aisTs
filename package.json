@@ -24,7 +24,15 @@
   ],
   "author": "",
   "license": "MIT",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinihcrosa/aisTs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinihcrosa/aisTs/issues"
+  },
+  "homepage": "https://github.com/vinihcrosa/aisTs#readme",
+  "description": "TypeScript library to encode and decode AIS (Automatic Identification System) messages and NMEA 0183 AIVDM sentences.",
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
